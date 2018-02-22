@@ -20,7 +20,7 @@ CHIP PC {
     Mux16(a = incOut, b = in, sel = load, out = loadOut);
     Mux16(a = loadOut, b = false, sel = reset, out = resetOut);
 
-    Inc16(in = regOut, out = incrementerOut);
-
     Register(in = resetOut, load = true, out = out, out = regOut);
+
+    Inc16(in = regOut, out = incrementerOut);
 }
