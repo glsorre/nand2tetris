@@ -12,3 +12,53 @@
 // the screen should remain fully clear as long as no key is pressed.
 
 // Put your code here.
+  @8192
+  D=A
+  @index
+  M=D // Initialize pixel index to 8192 at RAM[17]
+
+(LOOP)
+  @KBD
+  D=M
+  @PRESSED
+  D;JNE   // goto PRESSED if KBD not equal to 0
+  @UNPRESSED
+  D;JEQ   // goto UNPRESSED if KBD equal to 0
+  @LOOP
+  0;JMP // loop if UNPRESSED
+
+(UNPRESSED)
+  @8192
+  D=A
+  @index
+  M=D // Initialize pixel index to 8192 at RAM[17]
+  @WHITE_LOOP
+  0;JMP
+
+(PRESSED)
+  @8192
+  D=A
+  @index
+  M=D // Initialize pixel index to 8192 at RAM[17]
+  @BLACK_LOOP
+  0;JMP
+
+(BLACK_LOOP)
+  @LOOP
+  D;JLT
+  @SCREEN
+  A=A+D   // Calculate byte address
+  M=-1    // Fill with black
+  D=D-1
+  @BLACK_LOOP
+  0;JMP   // goto END
+
+(WHITE_LOOP)
+  @LOOP
+  D;JLT
+  @SCREEN
+  A=A+D   // Calculate byte address
+  M=0   // Fill with black
+  D=D-1
+  @WHITE_LOOP
+  0;JMP   // goto END
