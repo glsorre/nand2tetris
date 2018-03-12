@@ -3,6 +3,46 @@ import cli.app
 import copy
 import re
 
+computation = {
+    '0':    '0101010',
+    '1':    '0111111',
+    '-1':   '0111010',
+    'D':    '0001100',
+    'A':    '0110000',
+    '!D':   '0001101',
+    '!A':   '0110001',
+    '-D':   '0001111',
+    '-A':   '0110011',
+    'D+1':  '0011111',
+    'A+1':  '0110111',
+    'D-1':  '0001110',
+    'A-1':  '0110010',
+    'D+A':  '0000010',
+    'D-A':  '0010011',
+    'A-D':  '0000111',
+    'D&A':  '0000000',
+    'D|A':  '0010101',
+    'M':    '1110000',
+    '-M':   '1110011',
+    'M+1':  '1110111',
+    'M-1':  '1110010',
+    'D+M':  '1000010',
+    'D-M':  '1010011',
+    'M-D':  '1000111',
+    'D&M':  '1000000',
+    'D|M':  '1010101'
+}
+
+destination = {
+    'None': '000',
+    'D':    '010',
+    'MD':   '011',
+    'A':    '100',
+    'AM':   '101',
+    'AD':   '110',
+    'AM':   '111'
+}
+
 def eliminate_comments(lines):
     sep = '//'
     result = copy.copy(lines)
@@ -37,14 +77,31 @@ def parse_a(lines):
     return result
     
 def parse_c(lines):
-    sep = '0'
     result = copy.copy(lines)
     
     for i, line in enumerate(lines):
-        if sep != line[0:1]:
-            a = re.split('=|;',line)
+        if line[0:1] != '01' or line[0:1] != '00':
+            print(line)
+            a = re.split('[;|=]', line)
+            print(a)
+            print(len(a))
             
-            binary = "111"
+            comp = 0
+            dest = 0
+            jmp = 0 
+
+            if len(a) == 2 and "=" in line:
+                print('assegnazione')
+                comp = computation[a[1]]
+                dest = destination[a[0]]
+                jump = '000'
+            elif len(a) == 2 and ";" in line:
+                print('jump')
+            else:
+                print('assegnazione e jump')
+            
+            binary = "111" + comp + dest + jmp
+            
             
             result[i] = binary + '\n'
             
