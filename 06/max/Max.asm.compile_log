@@ -1,0 +1,49 @@
+INFO:root:### COMPILATION STARTED
+DEBUG:root:File content: ['// This file is part of www.nand2tetris.org\n', '// and the book "The Elements of Computing Systems"\n', '// by Nisan and Schocken, MIT Press.\n', '// File name: projects/06/max/Max.asm\n', '\n', '// Computes R2 = max(R0, R1)  (R0,R1,R2 refer to RAM[0],RAM[1],RAM[2])\n', '\n', '   @R0\n', '   D=M              // D = first number\n', '   @R1\n', '   D=D-M            // D = first number - second number\n', '   @OUTPUT_FIRST\n', '   D;JGT            // if D>0 (first is greater) goto output_first\n', '   @R1\n', '   D=M              // D = second number\n', '   @OUTPUT_D\n', '   0;JMP            // goto output_d\n', '(OUTPUT_FIRST)\n', '   @R0             \n', '   D=M              // D = first number\n', '(OUTPUT_D)\n', '   @R2\n', '   M=D              // M[2] = D (greatest number)\n', '(INFINITE_LOOP)\n', '   @INFINITE_LOOP\n', '   0;JMP            // infinite loop\n']
+INFO:root:### ELIMINATING COMMENTS...
+DEBUG:root:File content - no comments: ['\n', '\n', '   @R0\n', 'D=M', '   @R1\n', 'D=D-M', '   @OUTPUT_FIRST\n', 'D;JGT', '   @R1\n', 'D=M', '   @OUTPUT_D\n', '0;JMP', '(OUTPUT_FIRST)\n', '   @R0             \n', 'D=M', '(OUTPUT_D)\n', '   @R2\n', 'M=D', '(INFINITE_LOOP)\n', '   @INFINITE_LOOP\n', '0;JMP']/n
+INFO:root:### ELIMINATING COMMENTS...DONE
+INFO:root:### ELIMINATING NEWLINES...
+DEBUG:root:File content - no newlines: ['@R0', 'D=M', '@R1', 'D=D-M', '@OUTPUT_FIRST', 'D;JGT', '@R1', 'D=M', '@OUTPUT_D', '0;JMP', '(OUTPUT_FIRST)', '@R0', 'D=M', '(OUTPUT_D)', '@R2', 'M=D', '(INFINITE_LOOP)', '@INFINITE_LOOP', '0;JMP']/n
+INFO:root:### ELIMINATING NEWLINES...DONE
+INFO:root:### COLLECTING LABELS...
+DEBUG:root:File content - labels: {'OUTPUT_FIRST': 10, 'OUTPUT_D': 12, 'INFINITE_LOOP': 14}/n
+DEBUG:root:File content - collect labels: ['@R0', 'D=M', '@R1', 'D=D-M', '@OUTPUT_FIRST', 'D;JGT', '@R1', 'D=M', '@OUTPUT_D', '0;JMP', '@R0', 'D=M', '@R2', 'M=D', '@INFINITE_LOOP', '0;JMP']/n
+INFO:root:### COLLECTING LABELS...DONE
+INFO:root:### COLLECTING VARIABLES...
+DEBUG:root:File content - variables: {'SP': 0, 'LCL': 1, 'ARG': 2, 'THIS': 3, 'THAT': 4, 'R0': 0, 'R1': 1, 'R2': 2, 'R3': 3, 'R4': 4, 'R5': 5, 'R6': 6, 'R7': 7, 'R8': 8, 'R9': 9, 'R10': 10, 'R11': 11, 'R12': 12, 'R13': 13, 'R14': 14, 'R15': 15, 'SCREEN': 16384, 'KBD': 24576}/n
+DEBUG:root:File content - collect variables: ['@R0', 'D=M', '@R1', 'D=D-M', '@OUTPUT_FIRST', 'D;JGT', '@R1', 'D=M', '@OUTPUT_D', '0;JMP', '@R0', 'D=M', '@R2', 'M=D', '@INFINITE_LOOP', '0;JMP']/n
+INFO:root:### COLLECTING VARIABLES...DONE
+INFO:root:### PARSE VARIABLES...
+DEBUG:root:File content - parse variables: ['@0', 'D=M', '@1', 'D=D-M', '@10', 'D;JGT', '@1', 'D=M', '@12', '0;JMP', '@0', 'D=M', '@2', 'M=D', '@14', '0;JMP']/n
+INFO:root:### PARSE VARIABLES...DONE
+INFO:root:### PARSING A INSTRUNCTIONS...
+DEBUG:root:File content - a instructions: ['0000000000000000\n', 'D=M', '0000000000000001\n', 'D=D-M', '0000000000001010\n', 'D;JGT', '0000000000000001\n', 'D=M', '0000000000001100\n', '0;JMP', '0000000000000000\n', 'D=M', '0000000000000010\n', 'M=D', '0000000000001110\n', '0;JMP']/n
+INFO:root:### PARSING A INSTRUNCTIONS DONE...
+INFO:root:### PARSING C INSTRUNCTIONS...
+DEBUG:root:Line content - c instructions: 0000000000000000
+/n
+DEBUG:root:Line content - c instructions: D=M/n
+DEBUG:root:Line content - c instructions: 0000000000000001
+/n
+DEBUG:root:Line content - c instructions: D=D-M/n
+DEBUG:root:Line content - c instructions: 0000000000001010
+/n
+DEBUG:root:Line content - c instructions: D;JGT/n
+DEBUG:root:Line content - c instructions: 0000000000000001
+/n
+DEBUG:root:Line content - c instructions: D=M/n
+DEBUG:root:Line content - c instructions: 0000000000001100
+/n
+DEBUG:root:Line content - c instructions: 0;JMP/n
+DEBUG:root:Line content - c instructions: 0000000000000000
+/n
+DEBUG:root:Line content - c instructions: D=M/n
+DEBUG:root:Line content - c instructions: 0000000000000010
+/n
+DEBUG:root:Line content - c instructions: M=D/n
+DEBUG:root:Line content - c instructions: 0000000000001110
+/n
+DEBUG:root:Line content - c instructions: 0;JMP/n
+DEBUG:root:File content - c instrunctions: ['0000000000000000\n', '1111110000010000\n', '0000000000000001\n', '1111010011010000\n', '0000000000001010\n', '1110001100000001\n', '0000000000000001\n', '1111110000010000\n', '0000000000001100\n', '1110101010000111\n', '0000000000000000\n', '1111110000010000\n', '0000000000000010\n', '1110001100001000\n', '0000000000001110\n', '1110101010000111']/n
+INFO:root:### PARSING C INSTRUNCTIONS DONE...

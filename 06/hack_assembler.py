@@ -2,6 +2,7 @@
 import cli.app
 import copy
 import re
+import logging
 
 computation = {
     '0':    '0101010',
@@ -23,6 +24,7 @@ computation = {
     'D&A':  '0000000',
     'D|A':  '0010101',
     'M':    '1110000',
+    '!M':   '1110001',
     '-M':   '1110011',
     'M+1':  '1110111',
     'M-1':  '1110010',
@@ -33,14 +35,58 @@ computation = {
     'D|M':  '1010101'
 }
 
+
+
 destination = {
-    'None': '000',
+    'none': '000',
+    'M':    '001',
     'D':    '010',
     'MD':   '011',
     'A':    '100',
     'AM':   '101',
     'AD':   '110',
-    'AM':   '111'
+    'AMD':  '111'
+}
+
+jump = {
+    'none': '000',
+    'JGT':  '001',
+    'JEQ':  '010',
+    'JGE':  '011',
+    'JLT':  '100',
+    'JNE':  '101',
+    'JLE':  '110',
+    'JMP':  '111'
+}
+
+labels = {
+
+}
+
+variables = {
+    'SP':       0,
+    'LCL':      1,
+    'ARG':      2,
+    'THIS':     3,
+    'THAT':     4,
+    'R0':       0,
+    'R1':       1,
+    'R2':       2,
+    'R3':       3,
+    'R4':       4,
+    'R5':       5,
+    'R6':       6,
+    'R7':       7,
+    'R8':       8,
+    'R9':       9,
+    'R10':      10,
+    'R11':      11,
+    'R12':      12,
+    'R13':      13,
+    'R14':      14,
+    'R15':      15,
+    'SCREEN':   16384,
+    'KBD':      24576  
 }
 
 def eliminate_comments(lines):
@@ -51,6 +97,13 @@ def eliminate_comments(lines):
         if sep == line[0:2]:
             result.remove(line)
     
+    for i, line in enumerate(result):
+        if sep in line:
+            temp = line.split(sep)
+            temp = temp[0].strip()
+            result[i] = temp
+                    
+    logging.debug('File content - no comments: %s/n' % result)
     return result
     
 def eliminate_newlines(lines):
@@ -60,66 +113,168 @@ def eliminate_newlines(lines):
     for i, line in enumerate(lines):
         if sep == line:
             result.remove(line)
-    
+            
+    for i, line in enumerate(result):
+        result[i] = line.strip()
+        
+    logging.debug('File content - no newlines: %s/n' % result)    
     return result
+    
+def collect_labels(lines):   
+    #result = copy.copy(lines)
+    counter = 0
+    
+    for i, line in enumerate(lines):
+        if '(' in line and ')' in line:
+            label = line[1:-1]
+            labels[label] = i - counter
+            counter += 1
+    
+    for i, line in enumerate(lines):
+        if '(' in line and ')' in line:
+            lines.remove(line)
+    
+    logging.debug('File content - labels: %s/n' % labels)
+    logging.debug('File content - collect labels: %s/n' % lines)    
+    return lines
+    
+def collect_variables(lines):    
+    sep = '@'
+    start = variables['R15'] + 1
+        
+    for i, line in enumerate(lines):
+        if sep == line[0:1]:
+            a = line.split('@')
+            
+            try:
+                label = int(a[1])
+            except:
+                label = str(a[1])
+            
+            if isinstance(label, str) and label not in labels.keys() and label not in variables.keys():
+                variables[label] = start
+                start += 1
+    
+    logging.debug('File content - variables: %s/n' % variables)
+    logging.debug('File content - collect variables: %s/n' % lines)
+    return lines
+    
+def parse_variables(lines):
+    sep = '@'
+    
+    for i, line in enumerate(lines):
+        #logging.debug('Line content - parse variables: %s/n' % line)
+        if sep == line[0:1]:
+            a = line.split('@')
+            if a[1] in labels.keys():
+                a[1] = labels[a[1]]
+            elif a[1] in variables.keys():
+                a[1] = variables[a[1]]
+            
+            lines[i] = '@'.join(str(e) for e in a)
+            
+    logging.debug('File content - parse variables: %s/n' % lines)
+    return lines
     
 def parse_a(lines):
     sep = '@'
     result = copy.copy(lines)
     
     for i, line in enumerate(lines):
+        #logging.debug('Line content - a instructions: %s/n' % line)
         if sep == line[0:1]:
             a = line.split('@')
             binary = bin(int(a[1]))[2:].zfill(15)
             
             result[i] = "0" + binary + '\n'
-
+    
+    logging.debug('File content - a instructions: %s/n' % result)
     return result
     
 def parse_c(lines):
     result = copy.copy(lines)
     
     for i, line in enumerate(lines):
-        if line[0:1] != '01' or line[0:1] != '00':
-            print(line)
-            a = re.split('[;|=]', line)
-            print(a)
-            print(len(a))
-            
+        logging.debug('Line content - c instructions: %s/n' % line)
+        if line[0:2] != '00' and line[0:2] != '01':
+            a = re.split('[;=]', line)
+                        
             comp = 0
             dest = 0
             jmp = 0 
 
             if len(a) == 2 and "=" in line:
-                print('assegnazione')
                 comp = computation[a[1]]
                 dest = destination[a[0]]
-                jump = '000'
+                jmp = jump['none']
             elif len(a) == 2 and ";" in line:
-                print('jump')
+                comp = computation[a[0]]
+                dest = destination['none']
+                jmp = jump[a[1]]
             else:
-                print('assegnazione e jump')
+                comp = computation[a[1]]
+                dest = destination[a[0]]
+                jmp = jump[a[2]]
             
             binary = "111" + comp + dest + jmp
             
-            
-            result[i] = binary + '\n'
-            
+            if i < len(lines)-1:
+                result[i] = binary + '\n'
+            else:
+                result[i] = binary
+    
+    logging.debug('File content - c instrunctions: %s/n' % result)
     return result
 
-@cli.app.CommandLineApp
+
+
+#@cli.app.CommandLineApp
 def hack_assembler(app):
+    if app.params.debug:
+        logging.basicConfig(filename=app.params.file+'.compile_log', filemode='w', level=logging.DEBUG)
+    else:
+        logging.basicConfig(filename=app.params.file+'.compile_log', filemode='w', level=logging.INFO)
     
+    logging.info('### COMPILATION STARTED')
+        
     with open(app.params.file, encoding="utf-8") as f:
         content = f.readlines()
+        
+    logging.debug('File content: %s' % content)
     
+    logging.info('### ELIMINATING COMMENTS...')
     result = eliminate_comments(content)
-    result = eliminate_newlines(result)
-    result = parse_a(result)
-    result = parse_c(result)
-    print(''.join(result))
+    logging.info('### ELIMINATING COMMENTS...DONE')
     
+    logging.info('### ELIMINATING NEWLINES...')
+    result = eliminate_newlines(result)
+    logging.info('### ELIMINATING NEWLINES...DONE')
+    
+    logging.info('### COLLECTING LABELS...')
+    result = collect_labels(result)
+    logging.info('### COLLECTING LABELS...DONE')
+    
+    logging.info('### COLLECTING VARIABLES...')
+    result = collect_variables(result)
+    logging.info('### COLLECTING VARIABLES...DONE')
+    
+    logging.info('### PARSE VARIABLES...')
+    result = parse_variables(result)
+    logging.info('### PARSE VARIABLES...DONE')
+    
+    logging.info('### PARSING A INSTRUNCTIONS...')
+    result = parse_a(result)
+    logging.info('### PARSING A INSTRUNCTIONS DONE...')
+    
+    logging.info('### PARSING C INSTRUNCTIONS...')
+    result = parse_c(result)
+    logging.info('### PARSING C INSTRUNCTIONS DONE...')
+        
+    print(''.join(str(e) for e in result))
+    
+hack_assembler = cli.app.CommandLineApp(hack_assembler)    
 hack_assembler.add_param('file', metavar='FILE', help='The asm file.')
+hack_assembler.add_param("-d", "--debug", help="log level to debug", default=False, action="store_true")
 
 if __name__ == "__main__":
     hack_assembler.run()
