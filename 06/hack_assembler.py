@@ -121,8 +121,8 @@ def eliminate_newlines(lines):
     return result
     
 def collect_labels(lines):   
-    #result = copy.copy(lines)
     counter = 0
+    result = copy.copy(lines)
     
     for i, line in enumerate(lines):
         if '(' in line and ')' in line:
@@ -132,11 +132,11 @@ def collect_labels(lines):
     
     for i, line in enumerate(lines):
         if '(' in line and ')' in line:
-            lines.remove(line)
-    
+            result.remove(line)
+                
     logging.debug('File content - labels: %s/n' % labels)
-    logging.debug('File content - collect labels: %s/n' % lines)    
-    return lines
+    logging.debug('File content - collect labels: %s/n' % result)    
+    return result
     
 def collect_variables(lines):    
     sep = '@'
