@@ -14,7 +14,7 @@
       "envFile": "${workspaceFolder}/.env",
       "args": [
         "-d"
-        "add/Add.asm"
+        "pong/Pong.asm"
       ],
       "debugOptions": [
         "RedirectOutput"
