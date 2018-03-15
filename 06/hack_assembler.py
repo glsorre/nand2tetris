@@ -1,10 +1,12 @@
 #!/usr/bin/env python
-import cli.app
+
 import copy
 import re
 import logging
 
-computation = {
+import cli.app
+
+COMPUTATION = {
     '0':    '0101010',
     '1':    '0111111',
     '-1':   '0111010',
@@ -35,7 +37,7 @@ computation = {
     'D|M':  '1010101'
 }
 
-destination = {
+DESTINATION = {
     'none': '000',
     'M':    '001',
     'D':    '010',
@@ -46,7 +48,7 @@ destination = {
     'AMD':  '111'
 }
 
-jump = {
+JUMP = {
     'none': '000',
     'JGT':  '001',
     'JEQ':  '010',
@@ -57,11 +59,11 @@ jump = {
     'JMP':  '111'
 }
 
-labels = {
+LABELS = {
 
 }
 
-variables = {
+VARIABLES = {
     'SP':       0,
     'LCL':      1,
     'ARG':      2,
@@ -101,7 +103,7 @@ def eliminate_comments(lines):
             temp = temp[0].strip()
             result[i] = temp
 
-    logging.debug('File content - no comments: %s/n' % result)
+    logging.debug('File content - no comments: %s/n', result)
     return result
 
 def eliminate_newlines(lines):
@@ -115,7 +117,7 @@ def eliminate_newlines(lines):
     for i, line in enumerate(result):
         result[i] = line.strip()
 
-    logging.debug('File content - no newlines: %s/n' % result)
+    logging.debug('File content - no newlines: %s/n', result)
     return result
 
 def collect_labels(lines):
@@ -125,20 +127,20 @@ def collect_labels(lines):
     for i, line in enumerate(lines):
         if '(' in line and ')' in line:
             label = line[1:-1]
-            labels[label] = i - counter
+            LABELS[label] = i - counter
             counter += 1
 
     for i, line in enumerate(lines):
         if '(' in line and ')' in line:
             result.remove(line)
 
-    logging.debug('File content - labels: %s/n' % labels)
-    logging.debug('File content - collect labels: %s/n' % result)
+    logging.debug('File content - labels: %s/n', LABELS)
+    logging.debug('File content - collect labels: %s/n', result)
     return result
 
 def collect_variables(lines):
     sep = '@'
-    start = variables['R15'] + 1
+    start = VARIABLES['R15'] + 1
 
     for i, line in enumerate(lines):
         if sep == line[0:1]:
@@ -149,12 +151,12 @@ def collect_variables(lines):
             except:
                 label = str(a[1])
 
-            if isinstance(label, str) and label not in labels.keys() and label not in variables.keys():
-                variables[label] = start
+            if isinstance(label, str) and label not in LABELS.keys() and label not in VARIABLES.keys():
+                VARIABLES[label] = start
                 start += 1
 
-    logging.debug('File content - variables: %s/n' % variables)
-    logging.debug('File content - collect variables: %s/n' % lines)
+    logging.debug('File content - VARIABLES: %s/n', VARIABLES)
+    logging.debug('File content - collect variables: %s/n', lines)
     return lines
 
 def parse_variables(lines):
@@ -164,14 +166,14 @@ def parse_variables(lines):
         #logging.debug('Line content - parse variables: %s/n' % line)
         if sep == line[0:1]:
             a = line.split('@')
-            if a[1] in labels.keys():
-                a[1] = labels[a[1]]
-            elif a[1] in variables.keys():
-                a[1] = variables[a[1]]
+            if a[1] in LABELS.keys():
+                a[1] = LABELS[a[1]]
+            elif a[1] in VARIABLES.keys():
+                a[1] = VARIABLES[a[1]]
 
             lines[i] = '@'.join(str(e) for e in a)
 
-    logging.debug('File content - parse variables: %s/n' % lines)
+    logging.debug('File content - parse variables: %s/n', lines)
     return lines
 
 def parse_a(lines):
@@ -186,14 +188,14 @@ def parse_a(lines):
 
             result[i] = "0" + binary + '\n'
 
-    logging.debug('File content - a instructions: %s/n' % result)
+    logging.debug('File content - a instructions: %s/n', result)
     return result
 
 def parse_c(lines):
     result = copy.copy(lines)
 
     for i, line in enumerate(lines):
-        logging.debug('Line content - c instructions: %s/n' % line)
+        logging.debug('Line content - c instructions: %s/n', line)
         if line[0:2] != '00' and line[0:2] != '01':
             a = re.split('[;=]', line)
 
@@ -202,17 +204,17 @@ def parse_c(lines):
             jmp = 0
 
             if len(a) == 2 and "=" in line:
-                comp = computation[a[1]]
-                dest = destination[a[0]]
-                jmp = jump['none']
+                comp = COMPUTATION[a[1]]
+                dest = DESTINATION[a[0]]
+                jmp = JUMP['none']
             elif len(a) == 2 and ";" in line:
-                comp = computation[a[0]]
-                dest = destination['none']
-                jmp = jump[a[1]]
+                comp = COMPUTATION[a[0]]
+                dest = DESTINATION['none']
+                jmp = JUMP[a[1]]
             else:
-                comp = computation[a[1]]
-                dest = destination[a[0]]
-                jmp = jump[a[2]]
+                comp = COMPUTATION[a[1]]
+                dest = DESTINATION[a[0]]
+                jmp = JUMP[a[2]]
 
             binary = "111" + comp + dest + jmp
 
@@ -221,7 +223,7 @@ def parse_c(lines):
             else:
                 result[i] = binary
 
-    logging.debug('File content - c instrunctions: %s/n' % result)
+    logging.debug('File content - c instrunctions: %s/n', result)
     return result
 
 
@@ -238,7 +240,7 @@ def hack_assembler(app):
     with open(app.params.file, encoding="utf-8") as f:
         content = f.readlines()
 
-    logging.debug('File content: %s' % content)
+    logging.debug('File content: %s', content)
 
     logging.info('### ELIMINATING COMMENTS...')
     result = eliminate_comments(content)
