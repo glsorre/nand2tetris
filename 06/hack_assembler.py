@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import copy
 import re
 import logging
@@ -102,7 +100,7 @@ def eliminate_comments(lines):
             temp = line.split(sep)
             temp = temp[0].strip()
             result[i] = temp
-
+  
     logging.debug('File content - no comments: %s/n', result)
     return result
 
@@ -230,51 +228,51 @@ def parse_c(lines):
 
 #@cli.app.CommandLineApp
 def hack_assembler(app):
-    if app.params.debug:
-        logging.basicConfig(filename=app.params.file+'.compile_log', filemode='w', level=logging.DEBUG)
-    else:
-        logging.basicConfig(filename=app.params.file+'.compile_log', filemode='w', level=logging.INFO)
+    if app.params.verbose == 'DEBUG':
+        logging.basicConfig(level=logging.DEBUG)
+    elif app.params.verbose == 'INFO':
+        logging.basicConfig(level=logging.INFO)
 
     logging.info('### COMPILATION STARTED')
 
     with open(app.params.file, encoding="utf-8") as f:
         content = f.readlines()
 
-    logging.debug('File content: %s', content)
+    logging.debug('File content: %s\n', content)
 
     logging.info('### ELIMINATING COMMENTS...')
     result = eliminate_comments(content)
-    logging.info('### ELIMINATING COMMENTS...DONE')
+    logging.info('### ELIMINATING COMMENTS...DONE\n')
 
     logging.info('### ELIMINATING NEWLINES...')
     result = eliminate_newlines(result)
-    logging.info('### ELIMINATING NEWLINES...DONE')
+    logging.info('### ELIMINATING NEWLINES...DONE\n')
 
     logging.info('### COLLECTING LABELS...')
     result = collect_labels(result)
-    logging.info('### COLLECTING LABELS...DONE')
+    logging.info('### COLLECTING LABELS...DONE\n')
 
     logging.info('### COLLECTING VARIABLES...')
     result = collect_variables(result)
-    logging.info('### COLLECTING VARIABLES...DONE')
+    logging.info('### COLLECTING VARIABLES...DONE\n')
 
     logging.info('### PARSE VARIABLES...')
     result = parse_variables(result)
-    logging.info('### PARSE VARIABLES...DONE')
+    logging.info('### PARSE VARIABLES...DONE\n')
 
     logging.info('### PARSING A INSTRUNCTIONS...')
     result = parse_a(result)
-    logging.info('### PARSING A INSTRUNCTIONS DONE...')
+    logging.info('### PARSING A INSTRUNCTIONS DONE...\n')
 
     logging.info('### PARSING C INSTRUNCTIONS...')
     result = parse_c(result)
-    logging.info('### PARSING C INSTRUNCTIONS DONE...')
+    logging.info('### PARSING C INSTRUNCTIONS DONE...\n')
 
     print(''.join(str(e) for e in result))
 
 hack_assembler = cli.app.CommandLineApp(hack_assembler)
 hack_assembler.add_param('file', metavar='FILE', help='The asm file.')
-hack_assembler.add_param("-d", "--debug", help="log level to debug", default=False, action="store_true")
+hack_assembler.add_param("-v", "--verbose", type=str, default=False, help="INFO or DEBUG level to debug", action="store")
 
 if __name__ == "__main__":
     hack_assembler.run()
