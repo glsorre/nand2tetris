@@ -36,7 +36,7 @@ def main(argv):
     print(output_filename)
 
     parser = Parser(content)
-    code_writer = CodeWiter(output_filename)
+    code_writer = CodeWiter(output_filename, partial_filename)
 
     while parser.has_more_commands():
       
@@ -48,7 +48,7 @@ def main(argv):
       if command_type in ["C_PUSH", "C_POP"]:
         code_writer.write_push_pop(command_type, parser.arg1(), parser.arg2())
       elif command_type == 'C_ARITHMETIC':
-        code_writer.write_arithmetic(command_type, parser.arg1())
+        code_writer.write_arithmetic(parser.arg1())
         
       parser.advance()
 

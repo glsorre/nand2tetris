@@ -2,4 +2,5 @@
   "python.pythonPath": "/usr/local/opt/pyenv/versions/hack_assembler/bin/python",
   "python.linting.pylintPath": "/usr/local/opt/pyenv/versions/hack_assembler/bin/pylint",
   "pythonEditingTerm.termPath": "/usr/local/opt/pyenv/versions/hack_assembler/bin/python",
+  "python.linting.pylintArgs": ["--indent-string=\"  \""],
 }
