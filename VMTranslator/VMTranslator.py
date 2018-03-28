@@ -1,8 +1,8 @@
 import sys, getopt
 
-from vm_translator_lib.classes.parser import Parser
-from vm_translator_lib.classes.code_writer import CodeWiter
-from vm_translator_lib.clean_function import eliminate_comments, eliminate_newlines
+from parser import Parser
+from code_writer import CodeWiter
+from clean_function import eliminate_comments, eliminate_newlines
 
 def main(argv):
   print(argv)
