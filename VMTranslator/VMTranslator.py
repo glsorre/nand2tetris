@@ -48,7 +48,7 @@ def main(argv):
       if command_type in ["C_PUSH", "C_POP"]:
         code_writer.write_push_pop(command_type, parser.arg1(), parser.arg2())
       elif command_type == 'C_ARITHMETIC':
-        code_writer.write_arithmetic(parser.arg1())
+        code_writer.write_arithmetic(parser.arg1(), parser.index)
         
       parser.advance()
 

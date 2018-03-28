@@ -9,18 +9,60 @@ class CodeWiter:
     print('STATTTTTTTTTTTTTTTTTIC')
     print(self.static_name) 
   
-  def write_arithmetic(self, action):
+  def write_arithmetic(self, action, parser_index):
     self.file.write('// ' + action + '\n')
+
     if action == 'add':
       add_to_d(self.file)
       sp_minus_two(self.file)
       set_m_to_d_pointer(self.file, 'SP')
       sp_plus(self.file)
+
     elif action == 'sub':
       sub_to_d(self.file)
       sp_minus_two(self.file)
       set_m_to_d_pointer(self.file, 'SP')
       sp_plus(self.file)
+
+    elif action == 'or':
+      or_to_d(self.file)
+      sp_minus_two(self.file)
+      set_m_to_d_pointer(self.file, 'SP')
+      sp_plus(self.file)
+
+    elif action == 'and':
+      and_to_d(self.file)
+      sp_minus_two(self.file)
+      set_m_to_d_pointer(self.file, 'SP')
+      sp_plus(self.file)
+    
+    elif action == 'neg':
+      neg_to_d(self.file)
+      sp_minus(self.file)
+      set_m_to_d_pointer(self.file, 'SP')
+      sp_plus(self.file)
+
+    elif action == 'not':
+      not_to_d(self.file)
+      sp_minus(self.file)
+      set_m_to_d_pointer(self.file, 'SP')
+      sp_plus(self.file)
+
+    elif action == 'eq':
+      sub_to_d(self.file)
+      sp_minus_two(self.file)
+      operator_to_d(self.file, parser_index, 'EQ')
+
+    elif action == 'lt':
+      sub_to_d(self.file)
+      sp_minus_two(self.file)
+      operator_to_d(self.file, parser_index, 'LT')
+
+    elif action == 'gt':
+      sub_to_d(self.file)
+      sp_minus_two(self.file)
+      operator_to_d(self.file, parser_index, 'GT')
+
     self.file.write("\n")
 
   def write_push_pop(self, command, segment, index):

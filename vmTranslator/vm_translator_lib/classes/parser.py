@@ -21,7 +21,7 @@ class Parser:
       return 'C_PUSH'
     elif line[0] == 'pop':
       return 'C_POP'
-    elif line[0] in ['add', 'sub', 'eq', 'lt' 'gt']:
+    elif line[0] in ['add', 'sub', 'eq', 'lt', 'gt', 'neg', 'not', 'and', 'or']:
       return 'C_ARITHMETIC'
     else:
       return None

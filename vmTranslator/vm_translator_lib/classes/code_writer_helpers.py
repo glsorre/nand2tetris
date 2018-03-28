@@ -73,3 +73,53 @@ def sub_to_d(file):
   file.write('D=M' + '\n')
   file.write('A=A+1' + '\n')
   file.write('D=D-M' + '\n')
+
+def and_to_d(file):
+  file.write('@SP' + '\n')
+  file.write('A=M' + '\n')
+  file.write('A=A-1' + '\n')
+  file.write('A=A-1' + '\n')
+  file.write('D=M' + '\n')
+  file.write('A=A+1' + '\n')
+  file.write('D=D&M' + '\n')
+
+def or_to_d(file):
+  file.write('@SP' + '\n')
+  file.write('A=M' + '\n')
+  file.write('A=A-1' + '\n')
+  file.write('A=A-1' + '\n')
+  file.write('D=M' + '\n')
+  file.write('A=A+1' + '\n')
+  file.write('D=D|M' + '\n')
+
+def neg_to_d(file):
+  file.write('@SP' + '\n')
+  file.write('A=M' + '\n')
+  file.write('A=A-1' + '\n')
+  file.write('D=M' + '\n')
+  file.write('D=-D' + '\n')
+
+def not_to_d(file):
+  file.write('@SP' + '\n')
+  file.write('A=M' + '\n')
+  file.write('A=A-1' + '\n')
+  file.write('D=M' + '\n')
+  file.write('D=!D' + '\n')
+
+def operator_to_d(file, index, operator):
+  label_true = 'TRUE' + str(index)
+  label_end = 'END' + str(index)
+  file.write('@' + label_true + '\n')
+  file.write('D;J' + operator + '\n')
+  file.write('@SP' + '\n')
+  file.write('A=M' + '\n')
+  file.write('M=0' + '\n')
+  file.write('@' + label_end + '\n')
+  file.write('0;JMP' + '\n')
+  file.write('(' + label_true + ')\n')
+  file.write('@SP' + '\n')
+  file.write('A=M' + '\n')
+  file.write('M=-1' + '\n')
+  file.write('(' + label_end + ')\n')
+  file.write('@SP' + '\n')
+  file.write('M=M+1' + '\n')
