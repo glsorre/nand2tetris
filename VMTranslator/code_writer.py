@@ -6,62 +6,61 @@ class CodeWiter:
     self.file = open(filename, 'w')
     self.TMP = 5
     self.static_name = partialname.split('/')[-2]
-    print('STATTTTTTTTTTTTTTTTTIC')
     print(self.static_name) 
-  
+ 
   def write_arithmetic(self, action, parser_index):
     self.file.write('// ' + action + '\n')
 
     if action == 'add':
-      add_to_d(self.file)
+      basic_operation_to_d(self.file, '+')
       sp_minus_two(self.file)
       set_m_to_d_pointer(self.file, 'SP')
       sp_plus(self.file)
 
     elif action == 'sub':
-      sub_to_d(self.file)
+      basic_operation_to_d(self.file, '-')
       sp_minus_two(self.file)
       set_m_to_d_pointer(self.file, 'SP')
       sp_plus(self.file)
 
     elif action == 'or':
-      or_to_d(self.file)
+      basic_operation_to_d(self.file, '|')
       sp_minus_two(self.file)
       set_m_to_d_pointer(self.file, 'SP')
       sp_plus(self.file)
 
     elif action == 'and':
-      and_to_d(self.file)
+      basic_operation_to_d(self.file, '&')
       sp_minus_two(self.file)
       set_m_to_d_pointer(self.file, 'SP')
       sp_plus(self.file)
-    
+
     elif action == 'neg':
-      neg_to_d(self.file)
+      single_operation_to_d(self.file, '-')
       sp_minus(self.file)
       set_m_to_d_pointer(self.file, 'SP')
       sp_plus(self.file)
 
     elif action == 'not':
-      not_to_d(self.file)
+      single_operation_to_d(self.file, '!')
       sp_minus(self.file)
       set_m_to_d_pointer(self.file, 'SP')
       sp_plus(self.file)
 
     elif action == 'eq':
-      sub_to_d(self.file)
+      basic_operation_to_d(self.file, '-')
       sp_minus_two(self.file)
-      operator_to_d(self.file, parser_index, 'EQ')
+      eq_operation_to_d(self.file, parser_index, 'EQ')
 
     elif action == 'lt':
-      sub_to_d(self.file)
+      basic_operation_to_d(self.file, '-')
       sp_minus_two(self.file)
-      operator_to_d(self.file, parser_index, 'LT')
+      eq_operation_to_d(self.file, parser_index, 'LT')
 
     elif action == 'gt':
-      sub_to_d(self.file)
+      basic_operation_to_d(self.file, '-')
       sp_minus_two(self.file)
-      operator_to_d(self.file, parser_index, 'GT')
+      eq_operation_to_d(self.file, parser_index, 'GT')
 
     self.file.write("\n")
 
@@ -139,31 +138,32 @@ class CodeWiter:
         set_d_to_m_pointer(self.file, 'SP')
         address = self.static_name + '.' + index
         set_m_to_d(self.file, address)
-        
+  
       elif segment == 'local':
         sp_minus(self.file)
-        set_m_to_d_pointer_plus_d(self.file, 'LCL', index)
+        set_m_to_d_pointer_plus_d(self.file, 'LCL', index, 'R13')
         set_d_to_m_pointer(self.file, 'SP')
-        set_m_to_d_pointer(self.file, 'R13')
+        #set_m_to_d_pointer(self.file, 'R13')
 
       elif segment == 'argument':
         sp_minus(self.file)
-        set_m_to_d_pointer_plus_d(self.file, 'ARG', index)
+        set_m_to_d_pointer_plus_d(self.file, 'ARG', index, 'R13')
         set_d_to_m_pointer(self.file, 'SP')
         set_m_to_d_pointer(self.file, 'R13')
 
       elif segment == 'this':
         sp_minus(self.file)
-        set_m_to_d_pointer_plus_d(self.file, 'THIS', index)
+        set_m_to_d_pointer_plus_d(self.file, 'THIS', index, 'R13')
         set_d_to_m_pointer(self.file, 'SP')
         set_m_to_d_pointer(self.file, 'R13')
 
       elif segment == 'that':
         sp_minus(self.file)
-        set_m_to_d_pointer_plus_d(self.file, 'THAT', index)
+        set_m_to_d_pointer_plus_d(self.file, 'THAT', index, 'R13')
         set_d_to_m_pointer(self.file, 'SP')
         set_m_to_d_pointer(self.file, 'R13')
       self.file.write('\n')
 
   def close(self):
-    self.file.close()    
+    self.file.close()   
+ 

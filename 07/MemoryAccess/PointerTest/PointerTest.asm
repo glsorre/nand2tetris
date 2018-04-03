@@ -56,9 +56,6 @@ M=D
 @SP
 A=M
 D=M
-@R13
-A=M
-M=D
 
 // push constant 46
 @46
@@ -82,9 +79,6 @@ M=D
 @SP
 A=M
 D=M
-@R13
-A=M
-M=D
 
 // push pointer 0
 @THIS
