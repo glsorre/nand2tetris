@@ -1,6 +1,0 @@
-{
-  "python.pythonPath": "/Users/gsorrentino/venvs/nand2tetrisenv/bin/python",
-  "python.linting.pylintPath": "/Users/gsorrentino/venvs/nand2tetrisenv/bin/pylint",
-  "pythonEditingTerm.termPath": "/Users/gsorrentino/venvs/nand2tetrisenv/bin/python",
-  "python.linting.pylintArgs": ["--indent-string=\"  \""],
-}
