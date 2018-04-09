@@ -51,6 +51,13 @@ def sp_minus_two(file):
   sp_minus(file)
   file.write('M=M-1' + '\n')
 
+def write_label(file, label):
+  file.write('(' + label + ')\n')
+
+def write_goto(file, label):
+  file.write('@' + label + '\n')
+  file.write('0;JMP' + '\n')
+
 #possible operator: + - & |
 def basic_operation_to_d(file, operator):
   set_a_to_m(file, 'SP')
@@ -71,15 +78,17 @@ def single_operation_to_d(file, operator):
 def eq_operation_to_d(file, index, operator):
   label_true = 'true.' + str(index)
   label_end = 'end.' + str(index)
-
   file.write('@' + label_true + '\n')
   file.write('D;J' + operator + '\n')
   set_a_to_m(file, 'SP')
   file.write('M=0' + '\n')
-  file.write('@' + label_end + '\n')
-  file.write('0;JMP' + '\n')
-  file.write('(' + label_true + ')\n')
+  #file.write('@' + label_end + '\n')
+  #file.write('0;JMP' + '\n')
+  write_goto(file, label_end)
+  #file.write('(' + label_true + ')\n')
+  write_label(file, label_true)
   set_a_to_m(file, 'SP')
   file.write('M=-1' + '\n')
-  file.write('(' + label_end + ')\n')
+  #file.write('(' + label_end + ')\n')
+  write_label(file, label_end)
   sp_plus(file)

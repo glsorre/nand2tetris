@@ -47,6 +47,12 @@ def main(argv):
       
       if command_type in ["C_PUSH", "C_POP"]:
         code_writer.write_push_pop(command_type, parser.arg1(), parser.arg2())
+      elif command_type == 'C_LABEL':
+        code_writer.write_label(command_type, parser.arg1())
+      elif command_type == 'C_GOTO':
+        code_writer.write_goto(command_type, parser.arg1())
+      elif command_type == 'C_IF':
+        code_writer.write_if(command_type, parser.arg1())
       elif command_type == 'C_ARITHMETIC':
         code_writer.write_arithmetic(parser.arg1(), parser.index)
         

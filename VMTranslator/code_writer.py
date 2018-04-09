@@ -143,7 +143,7 @@ class CodeWiter:
         sp_minus(self.file)
         set_m_to_d_pointer_plus_d(self.file, 'LCL', index, 'R13')
         set_d_to_m_pointer(self.file, 'SP')
-        #set_m_to_d_pointer(self.file, 'R13')
+        set_m_to_d_pointer(self.file, 'R13')
 
       elif segment == 'argument':
         sp_minus(self.file)
@@ -164,6 +164,24 @@ class CodeWiter:
         set_m_to_d_pointer(self.file, 'R13')
       self.file.write('\n')
 
+  def write_label(self, command, label):
+    self.file.write('// label ' + label + '\n')
+    write_label(self.file, label)
+    self.file.write('\n')
+
+  def write_goto(self, command, label):
+    self.file.write('// goto ' + label + '\n')
+    write_goto(self.file, label)
+    self.file.write('\n')
+
+  def write_if(self, command, label):
+    self.file.write('// if-goto ' + label + '\n')
+    sp_minus(self.file)
+    set_d_to_m_pointer(self.file, 'SP')
+    self.file.write('@' + label + '\n')
+    self.file.write('D;JNE' + '\n')
+    self.file.write('\n')
+  
   def close(self):
     self.file.close()   
  
