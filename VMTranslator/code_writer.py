@@ -8,6 +8,16 @@ class CodeWiter:
         self.TMP = 5
         self.static_name = partialname.split('/')[-2]
         print(self.static_name)
+        #self.current_file = partialname
+
+    def set_file_name(self, partialname):
+        self.static_name = partialname.split('/')[-2]
+
+    def write_init(self):
+        self.file.write('//  init' + '\n')
+        set_d_to_value(self.file, '256')
+        set_m_to_d(self.file, 'SP')
+        self.file.write('\n')
 
     def write_arithmetic(self, action, parser_index):
         self.file.write('// ' + action + '\n')
@@ -183,6 +193,42 @@ class CodeWiter:
         self.file.write('D;JNE' + '\n')
         self.file.write('\n')
 
+    def write_call(self, command, args):
+        self.file.write('// call ' + command + ' ' + args + '\n')
+        set_d_to_value(self.file, command)
+        set_m_to_d_pointer(self.file, 'SP')
+
+        sp_plus(self.file)
+        set_d_to_m(self.file, 'LCL')
+        set_m_to_d_pointer(self.file, 'SP')
+
+        sp_plus(self.file)
+        set_d_to_m(self.file, 'ARG')
+        set_m_to_d_pointer(self.file, 'SP')
+
+        sp_plus(self.file)
+        set_d_to_m(self.file, 'THIS')
+        set_m_to_d_pointer(self.file, 'SP')
+
+        sp_plus(self.file)
+        set_d_to_m(self.file, 'THAT')
+        set_m_to_d_pointer(self.file, 'SP')
+
+        sp_plus(self.file)
+        self.file.write('D=M' + '\n')
+        self.file.write('@0' + '\n')
+        self.file.write('D=D-A' + '\n')
+        self.file.write('@5' + '\n')
+        self.file.write('D=D-A' + '\n')
+        set_m_to_d(self.file, 'ARG')
+
+        set_d_to_m(self.file, 'SP')
+        set_m_to_d(self.file, 'LCL')
+        self.file.write('@Sys.init' + '\n')
+        self.file.write('0;JMP' + '\n')
+        write_label(self.file, command)
+        self.file.write('\n')
+
     def write_function(self, command, name, args):
         self.file.write('// function ' + name + ' ' + args + '\n')
         write_label(self.file, name)
@@ -196,18 +242,18 @@ class CodeWiter:
         self.file.write('// return ' + '\n')
         set_d_to_m(self.file, 'LCL')
         set_m_to_d(self.file, 'endFrame')
-        #self.file.write('// endFrame = LCL ' + '\n')
+        self.file.write('// endFrame = LCL ' + '\n')
         get_return_address(self.file, '5', 'retAddr')
-        #self.file.write('// retAddr = endFrame - 5 ' + '\n')
+        self.file.write('// retAddr = *endFrame - 5 ' + '\n')
         sp_minus(self.file)
         self.file.write('A=M' + '\n')
         self.file.write('D=M' + '\n')
         set_m_to_d_pointer(self.file, 'ARG')
-        #self.file.write('// ARG = pop() ' + '\n')
+        self.file.write('// ARG = pop() ' + '\n')
         self.file.write('@ARG' + '\n')
         self.file.write('D=M+1' + '\n')
         set_m_to_d(self.file, 'SP')
-        #self.file.write('// SP = ARG + 1' + '\n')
+        self.file.write('// SP = ARG + 1' + '\n')
         restore_caller_address(self.file, '1', 'THAT')
         restore_caller_address(self.file, '2', 'THIS')
         restore_caller_address(self.file, '3', 'ARG')

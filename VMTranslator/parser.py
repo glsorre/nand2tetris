@@ -28,6 +28,8 @@ class Parser:
         elif line[0] == 'if-goto':
             return 'C_IF'
         elif line[0] == 'function':
+            return 'C_CALL'
+        elif line[0] == 'function':
             return 'C_FUNCTION'
         elif line[0] == 'return':
             return 'C_RETURN'
@@ -35,7 +37,7 @@ class Parser:
             return 'C_ARITHMETIC'
         else:
             return None
-  
+
     def arg1(self):
         line = self.lines[self.index].split(' ')
 
@@ -51,7 +53,7 @@ class Parser:
 
         command_type = self.command_type()
 
-        if command_type in ['C_PUSH', 'C_POP', 'C_FUNCTION']:
+        if command_type in ['C_PUSH', 'C_POP', 'C_FUNCTION', 'C_CALL']:
             return line[2]
         # elif command_type == 'C_ARITHMETIC':
         else:
