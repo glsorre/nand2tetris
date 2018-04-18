@@ -5,7 +5,7 @@ D=A
 M=D
 
 // call Sys.init 0
-@Sys.init
+@RETURNboot
 D=A
 @SP
 A=M
@@ -53,7 +53,10 @@ D=M
 M=D
 @Sys.init
 0;JMP
-(Sys.init)
+(RETURNboot)
+
+// function Main.fibonacci 0
+(Main.fibonacci)
 
 // push argument 0
 @0
@@ -238,6 +241,57 @@ M=D
 @SP
 M=M+1
 
+// call Main.fibonacci 1
+@RETURN15
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@LCL
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@ARG
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@THIS
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@THAT
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+D=M
+@0
+D=D-A
+@5
+D=D-A
+@ARG
+M=D
+@SP
+D=M
+@LCL
+M=D
+@Main.fibonacci
+0;JMP
+(RETURN15)
+
 // push argument 0
 @0
 D=A
@@ -277,6 +331,57 @@ A=M
 M=D
 @SP
 M=M+1
+
+// call Main.fibonacci 1
+@RETURN19
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@LCL
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@ARG
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@THIS
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@THAT
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+D=M
+@0
+D=D-A
+@5
+D=D-A
+@ARG
+M=D
+@SP
+D=M
+@LCL
+M=D
+@Main.fibonacci
+0;JMP
+(RETURN19)
 
 // add
 @SP
@@ -356,3 +461,73 @@ M=D
 @retAddr
 A=M
 0;JMP
+// function Sys.init 0
+(Sys.init)
+
+// push constant 4
+@4
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+
+// call Main.fibonacci 1
+@RETURN4
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@LCL
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@ARG
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@THIS
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@THAT
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+D=M
+@0
+D=D-A
+@5
+D=D-A
+@ARG
+M=D
+@SP
+D=M
+@LCL
+M=D
+@Main.fibonacci
+0;JMP
+(RETURN4)
+
+// label WHILE
+(WHILE)
+
+// goto WHILE
+@WHILE
+0;JMP
+

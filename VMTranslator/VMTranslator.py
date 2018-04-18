@@ -32,12 +32,14 @@ def main(argv):
             code_writer = CodeWiter(output_filename, partial_filename)
 
             code_writer.write_init()
-            code_writer.write_call('Sys.init', '0')
+            code_writer.write_call('C_CALL', 'Sys.init', '0', 'boot')
 
             for file in os.listdir(filename):
                 if file.endswith(".vm") and file != "Sys.vm":
+                    
                     print(file)
                     file_position = filename + '/' + file
+                    code_writer.set_file_name(file_position)
 
                     content = open(file_position).readlines()
                     content = [x.strip() for x in content]
@@ -66,6 +68,8 @@ def main(argv):
                             code_writer.write_goto(command_type, parser.arg1())
                         elif command_type == 'C_IF':
                             code_writer.write_if(command_type, parser.arg1())
+                        elif command_type == 'C_CALL':
+                            code_writer.write_call(command_type, parser.arg1(), parser.arg2(), str(parser.index))
                         elif command_type == 'C_FUNCTION':
                             code_writer.write_function(command_type, parser.arg1(), parser.arg2())
                         elif command_type == 'C_RETURN':
@@ -75,8 +79,51 @@ def main(argv):
 
                         parser.advance()
 
-            code_writer.close()
+            for file in os.listdir(filename):
+                if file.endswith(".vm") and file == "Sys.vm":
+                    print(file)
+                    file_position = filename + '/' + file
+                    code_writer.set_file_name(file_position)
 
+                    content = open(file_position).readlines()
+                    content = [x.strip() for x in content]
+
+                    print(content)
+                    content = eliminate_comments(content)
+                    print(content)
+                    content = eliminate_newlines(content)
+                    print(content)
+
+                    parser = Parser(content)
+
+                    while parser.has_more_commands():
+
+                        command_type = parser.command_type()
+                        print(command_type)
+                        print(parser.arg1())
+                        print(parser.arg2())
+
+                        if command_type in ["C_PUSH", "C_POP"]:
+                            code_writer.write_push_pop(
+                                command_type, parser.arg1(), parser.arg2())
+                        elif command_type == 'C_LABEL':
+                            code_writer.write_label(command_type, parser.arg1())
+                        elif command_type == 'C_GOTO':
+                            code_writer.write_goto(command_type, parser.arg1())
+                        elif command_type == 'C_IF':
+                            code_writer.write_if(command_type, parser.arg1())
+                        elif command_type == 'C_CALL':
+                            code_writer.write_call(command_type, parser.arg1(), parser.arg2(), str(parser.index))
+                        elif command_type == 'C_FUNCTION':
+                            code_writer.write_function(command_type, parser.arg1(), parser.arg2())
+                        elif command_type == 'C_RETURN':
+                            code_writer.write_return(command_type)
+                        elif command_type == 'C_ARITHMETIC':
+                            code_writer.write_arithmetic(parser.arg1(), parser.index)
+
+                        parser.advance()
+            
+            code_writer.close()
 
         else:
             with open(filename) as f:

@@ -8,7 +8,6 @@ class CodeWiter:
         self.TMP = 5
         self.static_name = partialname.split('/')[-2]
         print(self.static_name)
-        #self.current_file = partialname
 
     def set_file_name(self, partialname):
         self.static_name = partialname.split('/')[-2]
@@ -193,9 +192,9 @@ class CodeWiter:
         self.file.write('D;JNE' + '\n')
         self.file.write('\n')
 
-    def write_call(self, command, args):
-        self.file.write('// call ' + command + ' ' + args + '\n')
-        set_d_to_value(self.file, command)
+    def write_call(self, command, name, args, index):
+        self.file.write('// call ' + name + ' ' + args + '\n')
+        set_d_to_value(self.file, 'RETURN' + index)
         set_m_to_d_pointer(self.file, 'SP')
 
         sp_plus(self.file)
@@ -224,9 +223,9 @@ class CodeWiter:
 
         set_d_to_m(self.file, 'SP')
         set_m_to_d(self.file, 'LCL')
-        self.file.write('@Sys.init' + '\n')
+        self.file.write('@' + name + '\n')
         self.file.write('0;JMP' + '\n')
-        write_label(self.file, command)
+        write_label(self.file, 'RETURN' + index)
         self.file.write('\n')
 
     def write_function(self, command, name, args):
