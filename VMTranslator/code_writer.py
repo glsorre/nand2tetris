@@ -213,7 +213,7 @@ class CodeWiter:
         restore_caller_address(self.file, '3', 'ARG')
         restore_caller_address(self.file, '4', 'LCL')
         set_a_to_m(self.file, 'retAddr')
-        write_goto(self.file, 'retAddr')
+        self.file.write('0;JMP' + '\n')
 
     def close(self):
         self.file.close()

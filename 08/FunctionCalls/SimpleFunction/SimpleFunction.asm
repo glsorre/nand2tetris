@@ -137,7 +137,6 @@ M=M+1
 D=M
 @endFrame
 M=D
-// endFrame = LCL 
 @5
 D=D-A
 A=D
@@ -155,7 +154,6 @@ M=D
 D=M+1
 @SP
 M=D
-// SP = ARG + 1
 @endFrame
 D=M
 @1
@@ -190,5 +188,4 @@ D=M
 M=D
 @retAddr
 A=M
-@retAddr
 0;JMP
