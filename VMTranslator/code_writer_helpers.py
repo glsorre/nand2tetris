@@ -120,5 +120,5 @@ def get_return_address(file, index, address):
     set_m_to_d(file, address)
 
 def restore_caller_address(file, index, address):
-    set_d_to_m_pointer(file, 'endFrame')
+    set_d_to_m(file, 'endFrame')
     get_return_address(file, index, address)

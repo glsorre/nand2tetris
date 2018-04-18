@@ -144,7 +144,6 @@ A=D
 D=M
 @retAddr
 M=D
-// retAddr = endFrame - 5 
 @SP
 M=M-1
 A=M
@@ -152,14 +151,12 @@ D=M
 @ARG
 A=M
 M=D
-// ARG = pop() 
 @ARG
 D=M+1
 @SP
 M=D
 // SP = ARG + 1
 @endFrame
-A=M
 D=M
 @1
 D=D-A
@@ -168,7 +165,6 @@ D=M
 @THAT
 M=D
 @endFrame
-A=M
 D=M
 @2
 D=D-A
@@ -177,7 +173,6 @@ D=M
 @THIS
 M=D
 @endFrame
-A=M
 D=M
 @3
 D=D-A
@@ -186,7 +181,6 @@ D=M
 @ARG
 M=D
 @endFrame
-A=M
 D=M
 @4
 D=D-A
@@ -194,7 +188,7 @@ A=D
 D=M
 @LCL
 M=D
-@ret
+@retAddr
 A=M
-@ret
+@retAddr
 0;JMP
