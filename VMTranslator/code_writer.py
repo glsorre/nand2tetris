@@ -1,16 +1,16 @@
 from code_writer_helpers import *
 
 
-class CodeWiter:
+class CodeWriter:
     def __init__(self, filename, partialname):
         self.lines = []
         self.file = open(filename, 'w')
         self.TMP = 5
-        self.static_name = partialname.split('/')[-2]
+        self.static_name = partialname.split('/')[-1]
         print(self.static_name)
 
     def set_file_name(self, partialname):
-        self.static_name = partialname.split('/')[-2]
+        self.static_name = partialname.split('/')[-1]
 
     def write_init(self):
         self.file.write('//  init' + '\n')
@@ -94,7 +94,7 @@ class CodeWiter:
                     sp_plus(self.file)
 
             elif segment == 'static':
-                address = self.static_name + '.' + index
+                address = self.static_name[:-3] + '.' + index
                 set_d_to_m(self.file, address)
                 set_m_to_d_pointer(self.file, 'SP')
                 sp_plus(self.file)
@@ -146,7 +146,7 @@ class CodeWiter:
             elif segment == 'static':
                 sp_minus(self.file)
                 set_d_to_m_pointer(self.file, 'SP')
-                address = self.static_name + '.' + index
+                address = self.static_name[:-3] + '.' + index
                 set_m_to_d(self.file, address)
 
             elif segment == 'local':
@@ -174,27 +174,27 @@ class CodeWiter:
                 set_m_to_d_pointer(self.file, 'R13')
             self.file.write('\n')
 
-    def write_label(self, command, label):
+    def write_label(self, command, label, file):
         self.file.write('// label ' + label + '\n')
-        write_label(self.file, label)
+        write_label(self.file, file + '$' + label)
         self.file.write('\n')
 
-    def write_goto(self, command, label):
+    def write_goto(self, command, label, file):
         self.file.write('// goto ' + label + '\n')
-        write_goto(self.file, label)
+        write_goto(self.file, file + '$' + label)
         self.file.write('\n')
 
-    def write_if(self, command, label):
+    def write_if(self, command, label, file):
         self.file.write('// if-goto ' + label + '\n')
         sp_minus(self.file)
         set_d_to_m_pointer(self.file, 'SP')
-        self.file.write('@' + label + '\n')
+        self.file.write('@' + file + '$' + label + '\n')
         self.file.write('D;JNE' + '\n')
         self.file.write('\n')
 
     def write_call(self, command, name, args, index):
         self.file.write('// call ' + name + ' ' + args + '\n')
-        set_d_to_value(self.file, 'RETURN' + index)
+        set_d_to_value(self.file, 'RETURN$' + index)
         set_m_to_d_pointer(self.file, 'SP')
 
         sp_plus(self.file)
@@ -215,7 +215,7 @@ class CodeWiter:
 
         sp_plus(self.file)
         self.file.write('D=M' + '\n')
-        self.file.write('@0' + '\n')
+        self.file.write('@' + args + '\n')
         self.file.write('D=D-A' + '\n')
         self.file.write('@5' + '\n')
         self.file.write('D=D-A' + '\n')
@@ -225,40 +225,42 @@ class CodeWiter:
         set_m_to_d(self.file, 'LCL')
         self.file.write('@' + name + '\n')
         self.file.write('0;JMP' + '\n')
-        write_label(self.file, 'RETURN' + index)
+        write_label(self.file, 'RETURN$' + index)
         self.file.write('\n')
 
-    def write_function(self, command, name, args):
-        self.file.write('// function ' + name + ' ' + args + '\n')
+    def write_function(self, command, name, args, file):
+        self.file.write('// function ' + file + ' ' + args + '\n')
         write_label(self.file, name)
         for i in range(int(args)):
             set_a_to_m(self.file, 'SP')
             self.file.write('M=0' + '\n')
             sp_plus(self.file)
         self.file.write('\n')
-    
+
     def write_return(self, command):
         self.file.write('// return ' + '\n')
         set_d_to_m(self.file, 'LCL')
         set_m_to_d(self.file, 'endFrame')
-        self.file.write('// endFrame = LCL ' + '\n')
+
         get_return_address(self.file, '5', 'retAddr')
-        self.file.write('// retAddr = *endFrame - 5 ' + '\n')
+
         sp_minus(self.file)
         self.file.write('A=M' + '\n')
         self.file.write('D=M' + '\n')
         set_m_to_d_pointer(self.file, 'ARG')
-        self.file.write('// ARG = pop() ' + '\n')
+
         self.file.write('@ARG' + '\n')
         self.file.write('D=M+1' + '\n')
         set_m_to_d(self.file, 'SP')
-        self.file.write('// SP = ARG + 1' + '\n')
+
         restore_caller_address(self.file, '1', 'THAT')
         restore_caller_address(self.file, '2', 'THIS')
         restore_caller_address(self.file, '3', 'ARG')
         restore_caller_address(self.file, '4', 'LCL')
+
         set_a_to_m(self.file, 'retAddr')
         self.file.write('0;JMP' + '\n')
+        self.file.write('\n')
 
     def close(self):
         self.file.close()

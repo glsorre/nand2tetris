@@ -95,8 +95,8 @@ def single_operation_to_d(file, operator):
 
 
 def eq_operation_to_d(file, index, operator):
-    label_true = 'true.' + str(index)
-    label_end = 'end.' + str(index)
+    label_true = 'true$' + str(index)
+    label_end = 'end$' + str(index)
     file.write('@' + label_true + '\n')
     file.write('D;J' + operator + '\n')
     set_a_to_m(file, 'SP')

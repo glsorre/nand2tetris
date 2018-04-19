@@ -5,7 +5,7 @@ D=A
 M=D
 
 // call Sys.init 0
-@RETURNboot
+@RETURN$bootstrap
 D=A
 @SP
 A=M
@@ -53,9 +53,9 @@ D=M
 M=D
 @Sys.init
 0;JMP
-(RETURNboot)
+(RETURN$bootstrap)
 
-// function Main.fibonacci 0
+// function Main.vm 0
 (Main.fibonacci)
 
 // push argument 0
@@ -92,18 +92,18 @@ D=D-M
 @SP
 M=M-1
 M=M-1
-@true.5
+@true$5
 D;JLT
 @SP
 A=M
 M=0
-@end.5
+@end$5
 0;JMP
-(true.5)
+(true$5)
 @SP
 A=M
 M=-1
-(end.5)
+(end$5)
 @SP
 M=M+1
 
@@ -113,15 +113,15 @@ M=M-1
 @SP
 A=M
 D=M
-@IF_TRUE
+@Main.vm$IF_TRUE
 D;JNE
 
 // goto IF_FALSE
-@IF_FALSE
+@Main.vm$IF_FALSE
 0;JMP
 
 // label IF_TRUE
-(IF_TRUE)
+(Main.vm$IF_TRUE)
 
 // push argument 0
 @0
@@ -142,14 +142,12 @@ M=M+1
 D=M
 @endFrame
 M=D
-// endFrame = LCL 
 @5
 D=D-A
 A=D
 D=M
 @retAddr
 M=D
-// retAddr = *endFrame - 5 
 @SP
 M=M-1
 A=M
@@ -157,12 +155,10 @@ D=M
 @ARG
 A=M
 M=D
-// ARG = pop() 
 @ARG
 D=M+1
 @SP
 M=D
-// SP = ARG + 1
 @endFrame
 D=M
 @1
@@ -198,8 +194,9 @@ M=D
 @retAddr
 A=M
 0;JMP
+
 // label IF_FALSE
-(IF_FALSE)
+(Main.vm$IF_FALSE)
 
 // push argument 0
 @0
@@ -242,7 +239,7 @@ M=D
 M=M+1
 
 // call Main.fibonacci 1
-@RETURN15
+@RETURN$15
 D=A
 @SP
 A=M
@@ -278,7 +275,7 @@ M=D
 @SP
 M=M+1
 D=M
-@0
+@1
 D=D-A
 @5
 D=D-A
@@ -290,7 +287,7 @@ D=M
 M=D
 @Main.fibonacci
 0;JMP
-(RETURN15)
+(RETURN$15)
 
 // push argument 0
 @0
@@ -333,7 +330,7 @@ M=D
 M=M+1
 
 // call Main.fibonacci 1
-@RETURN19
+@RETURN$19
 D=A
 @SP
 A=M
@@ -369,7 +366,7 @@ M=D
 @SP
 M=M+1
 D=M
-@0
+@1
 D=D-A
 @5
 D=D-A
@@ -381,7 +378,7 @@ D=M
 M=D
 @Main.fibonacci
 0;JMP
-(RETURN19)
+(RETURN$19)
 
 // add
 @SP
@@ -405,14 +402,12 @@ M=M+1
 D=M
 @endFrame
 M=D
-// endFrame = LCL 
 @5
 D=D-A
 A=D
 D=M
 @retAddr
 M=D
-// retAddr = *endFrame - 5 
 @SP
 M=M-1
 A=M
@@ -420,12 +415,10 @@ D=M
 @ARG
 A=M
 M=D
-// ARG = pop() 
 @ARG
 D=M+1
 @SP
 M=D
-// SP = ARG + 1
 @endFrame
 D=M
 @1
@@ -461,7 +454,8 @@ M=D
 @retAddr
 A=M
 0;JMP
-// function Sys.init 0
+
+// function Sys.vm 0
 (Sys.init)
 
 // push constant 4
@@ -474,7 +468,7 @@ M=D
 M=M+1
 
 // call Main.fibonacci 1
-@RETURN4
+@RETURN$26
 D=A
 @SP
 A=M
@@ -510,7 +504,7 @@ M=D
 @SP
 M=M+1
 D=M
-@0
+@1
 D=D-A
 @5
 D=D-A
@@ -522,12 +516,12 @@ D=M
 M=D
 @Main.fibonacci
 0;JMP
-(RETURN4)
+(RETURN$26)
 
 // label WHILE
-(WHILE)
+(Sys.vm$WHILE)
 
 // goto WHILE
-@WHILE
+@Sys.vm$WHILE
 0;JMP
 
