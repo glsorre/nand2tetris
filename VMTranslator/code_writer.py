@@ -94,7 +94,7 @@ class CodeWriter:
                     sp_plus(self.file)
 
             elif segment == 'static':
-                address = self.static_name[:-3] + '.' + index
+                address = self.static_name[:-3] + '$' + index
                 set_d_to_m(self.file, address)
                 set_m_to_d_pointer(self.file, 'SP')
                 sp_plus(self.file)
@@ -146,7 +146,7 @@ class CodeWriter:
             elif segment == 'static':
                 sp_minus(self.file)
                 set_d_to_m_pointer(self.file, 'SP')
-                address = self.static_name[:-3] + '.' + index
+                address = self.static_name[:-3] + '$' + index
                 set_m_to_d(self.file, address)
 
             elif segment == 'local':

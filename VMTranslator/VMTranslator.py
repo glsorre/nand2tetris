@@ -109,7 +109,7 @@ class Main:
             elif command_type == 'C_ARITHMETIC':
                 self.code_writer.write_arithmetic(
                     parser.arg1(),
-                    parser.index
+                    str(self.count)
                     )
 
             parser.advance()

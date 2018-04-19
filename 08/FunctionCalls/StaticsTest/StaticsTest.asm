@@ -78,7 +78,7 @@ M=M-1
 @SP
 A=M
 D=M
-@Class1.0
+@Class1$0
 M=D
 
 // push argument 1
@@ -101,7 +101,7 @@ M=M-1
 @SP
 A=M
 D=M
-@Class1.1
+@Class1$1
 M=D
 
 // push constant 0
@@ -175,7 +175,7 @@ A=M
 (Class1.get)
 
 // push static 0
-@Class1.0
+@Class1$0
 D=M
 @SP
 A=M
@@ -184,7 +184,7 @@ M=D
 M=M+1
 
 // push static 1
-@Class1.1
+@Class1$1
 D=M
 @SP
 A=M
@@ -290,7 +290,7 @@ M=M-1
 @SP
 A=M
 D=M
-@Class2.0
+@Class2$0
 M=D
 
 // push argument 1
@@ -313,7 +313,7 @@ M=M-1
 @SP
 A=M
 D=M
-@Class2.1
+@Class2$1
 M=D
 
 // push constant 0
@@ -387,7 +387,7 @@ A=M
 (Class2.get)
 
 // push static 0
-@Class2.0
+@Class2$0
 D=M
 @SP
 A=M
@@ -396,7 +396,7 @@ M=D
 M=M+1
 
 // push static 1
-@Class2.1
+@Class2$1
 D=M
 @SP
 A=M
