@@ -1,4 +1,6 @@
 class Parser:
+    count = 0
+
     def __init__(self, lines):
         self.lines = lines
         self.index = 0
@@ -14,6 +16,7 @@ class Parser:
 
     def advance(self):
         self.index += 1
+        Parser.count += 1
 
     def command_type(self):
         line = self.lines[self.index].split(' ')

@@ -8,7 +8,6 @@ from clean_function import eliminate_comments, eliminate_newlines
 class Main:
     def __init__(self, dest):
         self.dest = dest
-        self.count = 0
         self.code_writer = None
 
     def is_dest_dir(self):
@@ -95,7 +94,7 @@ class Main:
                     command_type,
                     parser.arg1(),
                     parser.arg2(),
-                    str(self.count)
+                    str(Parser.count)
                     )
             elif command_type == 'C_FUNCTION':
                 self.code_writer.write_function(
@@ -109,11 +108,13 @@ class Main:
             elif command_type == 'C_ARITHMETIC':
                 self.code_writer.write_arithmetic(
                     parser.arg1(),
-                    str(self.count)
+                    str(Parser.count)
                     )
 
             parser.advance()
-            self.count = self.count + 1
+
+    def close_file(self):
+        self.code_writer.close()
 
 def main(argv):
     print(argv)
@@ -135,6 +136,7 @@ def main(argv):
         ork.init_code_writer()
         ork.init_output_file()
         ork.build_output_file()
+        ork.close_file()
 
 if __name__ == "__main__":
     print(sys.argv)
