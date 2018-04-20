@@ -1,4 +1,4 @@
-// function SimpleFunction.test 2
+// function SimpleFunction 2
 (SimpleFunction.test)
 @SP
 A=M
@@ -189,3 +189,4 @@ M=D
 @retAddr
 A=M
 0;JMP
+

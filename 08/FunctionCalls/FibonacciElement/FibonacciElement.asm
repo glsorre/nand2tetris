@@ -55,7 +55,7 @@ M=D
 0;JMP
 (RETURN$bootstrap)
 
-// function Main.vm 0
+// function FibonacciElement 0
 (Main.fibonacci)
 
 // push argument 0
@@ -113,15 +113,15 @@ M=M-1
 @SP
 A=M
 D=M
-@Main.vm$IF_TRUE
+@FibonacciElement$IF_TRUE
 D;JNE
 
 // goto IF_FALSE
-@Main.vm$IF_FALSE
+@FibonacciElement$IF_FALSE
 0;JMP
 
 // label IF_TRUE
-(Main.vm$IF_TRUE)
+(FibonacciElement$IF_TRUE)
 
 // push argument 0
 @0
@@ -196,7 +196,7 @@ A=M
 0;JMP
 
 // label IF_FALSE
-(Main.vm$IF_FALSE)
+(FibonacciElement$IF_FALSE)
 
 // push argument 0
 @0
@@ -455,7 +455,7 @@ M=D
 A=M
 0;JMP
 
-// function Sys.vm 0
+// function FibonacciElement 0
 (Sys.init)
 
 // push constant 4
@@ -519,9 +519,9 @@ M=D
 (RETURN$26)
 
 // label WHILE
-(Sys.vm$WHILE)
+(FibonacciElement$WHILE)
 
 // goto WHILE
-@Sys.vm$WHILE
+@FibonacciElement$WHILE
 0;JMP
 
